@@ -1,3 +1,5 @@
+![alt text](https://circleci.com/gh/bubobox/assets.png?circle-token=13470ff92795bdad02e3681c993c1fedd4bdbba1 "Master build") 
+
 Assets
 ------
 Assets is a static class that makes it very easy to add javascript or stylesheets to your views.
