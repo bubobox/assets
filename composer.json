@@ -17,7 +17,10 @@
     "require-dev": {
     },
     "autoload": {
-        "psr-0": { "Assets": "library/" }
+        "psr-0": { "Assets": "library/" },
+        "classmap": [
+            "library/"
+        ]
     },
     "repositories": []
 }

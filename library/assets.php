@@ -1,4 +1,6 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+namespace BuboBox;
 
 /**
  * This static class can be used to load javascript or css resources from
@@ -6,7 +8,7 @@
  *
  * @author Wim Mostmans
  */
-class Assets extends Registry {
+class Assets {
 
 	/**
 	 * Key to use in the registry to save a list of js assets
@@ -35,6 +37,8 @@ class Assets extends Registry {
 	 * @var string
 	 */
 	const TYPE_CSS = 'css';
+
+	private static $registry = array();
 
 	/**
 	 * Load a javascript asset
@@ -86,6 +90,17 @@ class Assets extends Registry {
 	}
 
 	/**
+	 * Clean registry so previous added script or styles will be removed
+	 * 
+	 * @return void
+	 */
+	public static function reset() 
+	{
+		self::set(self::JAVASCRIPT_RESOURCE_KEY, null);
+		self::set(self::CSS_RESOURCE_KEY, null);
+	}
+
+	/**
 	 * Add a resource to the list to load
 	 *
 	 * @param string $url
@@ -107,21 +122,10 @@ class Assets extends Registry {
 	 * Generate a script tag from an url
 	 *
 	 */
-	protected static function script_tag($src = '', $language = 'javascript', $type = 'text/javascript', $index_page = FALSE)
+	protected static function script_tag($src = '', $language = 'javascript', $type = 'text/javascript')
     {
-        $CI =& get_instance();
         $script = '<scr'.'ipt';
-
-        if ( strpos($src, '://') !== FALSE) {
-            $script .= ' src="'.$src.'" ';
-        }
-        elseif ($index_page === TRUE) {
-            $script .= ' src="'.$CI->config->site_url($src).'" ';
-        }
-        else {
-            $script .= ' src="'.$CI->config->slash_item('base_url').$src.'" ';
-        }
-
+		$script .= ' src="'.$src.'" ';
         $script .= 'language="'.$language.'" type="'.$type.'"';
         $script .= ' /></scr'.'ipt>' . PHP_EOL;
 
@@ -132,25 +136,23 @@ class Assets extends Registry {
 	 * Generate a script tag from an url
 	 *
 	 */      
-	protected static function style_tag($src = '', $rel = 'stylesheet', $type = 'text/css', $index_page = FALSE)
+	protected static function style_tag($src = '', $rel = 'stylesheet', $type = 'text/css')
     {
-        $CI =& get_instance();
         $link = '<link';
- 		
- 		if ( strpos($src, '://') !== FALSE) {
-            $link .= ' href="'.$src.'" ';
-        }
-        elseif ($index_page === TRUE) {
-            $link .= ' href="'.$CI->config->site_url($src).'" ';
-        }
-        else {
-            $link .= ' href="'.$CI->config->slash_item('base_url').$src.'" ';
-        }
-
+ 		$link .= ' href="'.$src.'" ';
         $link .= 'rel="'.$rel.'" type="'.$type.'"';
         $link .= ' /></link>' . PHP_EOL;     
  
         return $link;
+    }
+
+    protected static function get($key) {
+    	return isset(self::$registry[$key]) ? self::$registry[$key] : null;
+    }
+
+    protected static function set($key, $value) {
+    	self::$registry[$key] = $value;
+    	return true;
     }
 
 }
