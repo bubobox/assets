@@ -3,7 +3,7 @@
     "description": "Assets is a static class that makes it very easy to add javascript or stylesheets to your views.",
     "keywords": ["asset", "js", "css", "stylesheet", "loader", "script", "include", "frontend"],
     "homepage": "http://github.com/bubobox",
-    "license": "",
+    "license": "MIT",
     "authors": [
         {
             "name": "Wim Mostmans",
