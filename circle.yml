@@ -5,3 +5,7 @@ machine:
 test:
   override:
     - phpunit -c tests:
+test:
+  override:
+    - phpunit -c tests:
+        timeout: 600
