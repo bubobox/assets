@@ -1,0 +1,23 @@
+{
+    "name": "bubobox/assets",
+    "description": "Assets is a static class that makes it very easy to add javascript or stylesheets to your views.",
+    "keywords": ["asset", "js", "css", "stylesheet", "loader", "script", "include", "frontend"],
+    "homepage": "http://github.com/bubobox",
+    "license": "",
+    "authors": [
+        {
+            "name": "Wim Mostmans",
+            "email": "wim@bubobox.com",
+            "homepage": "http://bubobox.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-0": { "Assets": "library/" }
+    },
+    "repositories": []
+}
