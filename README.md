@@ -25,3 +25,12 @@ Now in your view you can add the script and link tags for the resources using th
 	echo Assets::render(true, true); // Output both link and script tags
 
 For better examples take a look in the examples folder.
+
+Modifiers
+---------
+With a modifier callback function you can change the URLs of the assets before it's rendered into HTML.
+This can be handy if you for example want to load the .debug.js versions of your JavaScript files when your working in your development environment.
+
+	echo Assets::render(true, false, function($url) {
+		return str_replace('.min.js', '.js', $url);
+	});

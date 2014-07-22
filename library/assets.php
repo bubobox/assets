@@ -67,14 +67,19 @@ class Assets {
 	 *
 	 * @param bool $include_js
 	 * @param bool $include_css
+	 * @param  function $modifier Callback function to modify the asset url
 	 * @return string
 	 */
-	public static function render($include_js = TRUE, $include_css = FALSE) 
+	public static function render($include_js = TRUE, $include_css = FALSE, $modifier = null) 
 	{
 		$html = '';
 		if($include_js) {
 			if($list = self::get(self::JAVASCRIPT_RESOURCE_KEY)) {
 				foreach($list as $url) {
+
+					if( is_callable($modifier) )
+						$url = call_user_func($modifier, $url);
+
 					$html .= self::script_tag($url);
 				}
 			}
@@ -82,6 +87,10 @@ class Assets {
 		if($include_css) {
 			if($list = self::get(self::CSS_RESOURCE_KEY)) {
 				foreach($list as $url) {
+
+					if( is_callable($modifier) )
+						$url = call_user_func($modifier, $url);
+					
 					$html .= self::style_tag($url);
 				}
 			}

@@ -79,4 +79,24 @@ class Asset_Test extends PHPUnit_Framework_TestCase
 		$this->assertNotContains('<link', $only_script, 'Should not contain link tag');
 		$this->assertNotContains($style, $only_script, 'Should not contain style url');
 	}
+
+	public function testURLModifier() 
+	{
+		$style = 'modules/asset/assets/style.removethis.css';
+		$script = 'modules/asset/assets/script.removethis.js';
+
+		Assets::css( $style );
+		Assets::js( $script );
+		$only_style = \BuboBox\Assets::render(false, true, function($style) {
+			return str_replace('.removethis', '', $style);
+		});
+		$only_script = \BuboBox\Assets::render(true, false, function($script) {
+			return str_replace('.removethis', '', $script);
+		});
+
+		$this->assertNotContains('removethis', $only_style, 'Should not contain removethis part');
+		$this->assertNotContains('removethis', $only_script, 'Should not contain removethis part');
+
+	}
+
 }
