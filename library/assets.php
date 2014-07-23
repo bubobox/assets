@@ -43,23 +43,25 @@ class Assets {
 	/**
 	 * Load a javascript asset
 	 *
-	 * @param $url
+	 * @param string $url
+	 * @param int $order Order weight, the higher the number, the earlier the script will be loaded
 	 * @return void
 	 */
-	public static function js($url)
+	public static function js($url, $order = 0)
 	{
-		self::add($url, self::TYPE_JS);
+		self::add($url, self::TYPE_JS, $order);
 	}
 
 	/**
 	 * Load a stylesheet asset
 	 *
-	 * @param $url
+	 * @param string $url
+	 * @param int $order Order weight, the higher the number, the earlier the stylesheet will be loaded
 	 * @return void
 	 */
-	public static function css($url)
+	public static function css($url, $order = 0)
 	{
-		self::add($url, self::TYPE_CSS);
+		self::add($url, self::TYPE_CSS, $order);
 	}
 
 	/**
@@ -75,7 +77,9 @@ class Assets {
 		$html = '';
 		if($include_js) {
 			if($list = self::get(self::JAVASCRIPT_RESOURCE_KEY)) {
-				foreach($list as $url) {
+				foreach($list as $data) {
+
+					$url = $data['src'];
 
 					if( is_callable($modifier) )
 						$url = call_user_func($modifier, $url);
@@ -86,7 +90,9 @@ class Assets {
 		}
 		if($include_css) {
 			if($list = self::get(self::CSS_RESOURCE_KEY)) {
-				foreach($list as $url) {
+				foreach($list as $data) {
+
+					$url = $data['src'];
 
 					if( is_callable($modifier) )
 						$url = call_user_func($modifier, $url);
@@ -116,13 +122,13 @@ class Assets {
 	 * @param string $type
 	 * @return void
 	 */
-	protected static function add($url, $type = self::TYPE_JS) 
+	protected static function add($url, $type = self::TYPE_JS, $order = 0) 
 	{
 		$key = $type == self::TYPE_JS ? self::JAVASCRIPT_RESOURCE_KEY : self::CSS_RESOURCE_KEY;
 		if($list = self::get($key)) {
-			$list[] = $url;
+			$list[] = array( 'src' => $url, 'order' => $order );
 		} else {
-			$list = array($url);
+			$list = array( array( 'src' => $url, 'order' => $order ) );
 		}
 		self::set($key, $list);
 	}
@@ -156,12 +162,29 @@ class Assets {
     }
 
     protected static function get($key) {
-    	return isset(self::$registry[$key]) ? self::$registry[$key] : null;
+    	return isset(self::$registry[$key]) ? self::sort(self::$registry[$key], 'order') : null;
     }
 
     protected static function set($key, $value) {
     	self::$registry[$key] = $value;
     	return true;
+    }
+
+    /**
+     * Sort an array of array items based on a certain key
+     * @param  array $data 
+     * @param  string $key Key to sort on
+     * @return array 
+     */
+    public static function sort( $data, $sortBy, $order = SORT_DESC ) {
+
+    	foreach( $data as $key => $row ) {
+    		$sorter[$key] = $row[$sortBy];
+    	}
+
+    	array_multisort($sorter, SORT_DESC, $data);
+
+    	return $data;
     }
 
 }

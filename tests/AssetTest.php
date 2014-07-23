@@ -99,4 +99,23 @@ class Asset_Test extends PHPUnit_Framework_TestCase
 
 	}
 
+	public function testOrder()
+	{
+		$data = array(
+			array('order' => 100, 'src' => 'test1'),
+			array('order' => 200, 'src' => 'test2'),
+			array('order' => 55, 'src' => 'test3'),
+			array('order' => 0, 'src' => 'test5'),
+			array('order' => 300, 'src' => 'test4'),
+		);
+		$result = Assets::sort($data, 'order');
+
+		$this->assertEquals('test4', $result[0]['src']);
+		$this->assertEquals(300, $result[0]['order']);
+		$this->assertEquals('test2', $result[1]['src']);
+		$this->assertEquals('test1', $result[2]['src']);
+		$this->assertEquals('test3', $result[3]['src']);
+		$this->assertEquals('test5', $result[4]['src']);
+	}
+
 }

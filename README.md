@@ -26,6 +26,16 @@ Now in your view you can add the script and link tags for the resources using th
 
 For better examples take a look in the examples folder.
 
+Asset loading order
+-------------------
+You can assign a weight order to assets that you add using the second argument in the `js` and `css` method. The higher the number the earlier in the source the asset will be loaded.
+
+	Assets::js('modules/asset/assets/script1.js'); // Loaded third
+	Assets::js('modules/asset/assets/script2.js', 200); // Loaded first
+	Assets::js('modules/asset/assets/script3.js', 100); // Loaded second
+
+If you don't specify the order weight then the default will be used and that is 0.
+
 Modifiers
 ---------
 With a modifier callback function you can change the URLs of the assets before it's rendered into HTML.
